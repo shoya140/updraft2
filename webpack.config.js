@@ -2,11 +2,13 @@ const path = require('path');
 
 module.exports = {
     context: path.resolve(__dirname, './app/assets/src'),
-    entry: './app.js',
+    entry: {
+        index: './index.js'
+    },
 
     output: {
         path: path.resolve(__dirname, './app/assets/_dist'),
-        filename: 'main.js',
+        filename: '[name].js',
         publicPath: '/assets/_dist',
     },
 
@@ -17,20 +19,24 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.css$/,
-                loader: 'style-loader!css-loader',
+                test: /\.scss$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
             },
             {
                 test: /\.js$/,
-                loader: 'babel-loader',
                 exclude: /node_modules/,
-                options: {
-                    presets: ["es2015"]
-                },
-            },
-            {
-                test: /\.(jpg|png)$/,
-                loader: 'url-loader',
+                use: [
+                    {
+                        loader:'babel-loader',
+                        options: {
+                            presets: ["es2015"]
+                        }
+                    }
+                ]
             }
         ]
     }
